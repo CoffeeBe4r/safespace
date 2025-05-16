@@ -1,0 +1,24 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  background: none;
+}
+
+.App {
+  background: var(--zen-card);
+  border-radius: 28px;
+  padding: 2rem 0 3rem 0;
+}
+
+.card {
+  padding: 2em;
+  background: var(--zen-card);
+  border-radius: 22px;
+
+}
+
+.read-the-docs {
+  color: var(--zen-secondary);
+}

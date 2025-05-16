@@ -1,0 +1,112 @@
+:root {
+  --main-bg: #fff6e9;      /* fondo más cálido y neutro */
+  --main-primary: #c97c41; /* marrón medio */
+  --main-secondary: #a05a2c; /* marrón oscuro */
+  --main-accent: #e6b07a;  /* acento dorado */
+  --main-card: #fff6e9;    /* blanco cálido */
+  --main-text: #3e2723;    /* marrón profundo */
+  --main-border: #b87333;  /* cobre */
+  --main-muted: #f7e1c6;   /* beige suave */
+  --main-heading: #7c3f00; /* marrón intenso */
+  font-family: 'Segoe UI', 'Avenir', Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light;
+  color: var(--main-text);
+  background-color: var(--main-bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: var(--main-primary);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--main-accent);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--main-bg);
+  /* Animación de entrada para el body */
+  animation: fadein-bg 1.2s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes fadein-bg {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+h1 {
+  font-size: 2.6em;
+  line-height: 1.1;
+  color: var(--main-heading);
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  animation: fadein-comp 1s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes fadein-comp {
+  from { opacity: 0; transform: translateY(-24px);}
+  to   { opacity: 1; transform: translateY(0);}
+}
+
+button {
+  border-radius: 14px;
+  border: 1.5px solid var(--main-primary);
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background: var(--main-primary);
+  color: #fff;
+  cursor: pointer;
+  transition: 
+    background 0.18s, 
+    border-color 0.18s, 
+    color 0.18s,
+    transform 0.12s cubic-bezier(.4,0,.2,1),
+    box-shadow 0.18s;
+  box-shadow: 0 2px 8px #c97c4122;
+  position: relative;
+  z-index: 1;
+}
+button:hover {
+  background: var(--main-accent);
+  color: var(--main-heading);
+  border-color: var(--main-accent);
+  box-shadow: 0 4px 16px #c97c4133;
+  transform: translateY(-2px) scale(1.04);
+}
+button:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 4px #c97c4111;
+}
+
+button:focus,
+button:focus-visible {
+  /* sin rings */
+  outline: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f7e1c6;
+    background-color: #3e2723;
+  }
+  body {
+    background-color: #3e2723;
+  }
+  h1 {
+    color: var(--main-accent);
+  }
+}
