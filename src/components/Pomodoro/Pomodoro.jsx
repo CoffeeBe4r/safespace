@@ -17,7 +17,8 @@ export default function Pomodoro() {
         return saved;
       }
     } catch (e) { /* ignorar error */ }
-    return defaultConfig;
+    console.error()
+   return defaultConfig;
   };
 
   const [config, setConfig] = useState(getInitialConfig());
@@ -367,21 +368,70 @@ export default function Pomodoro() {
           </div>
         </div>
       )}
-      <h2 style={{marginTop: 60}}>{isBreak ? (isLongBreak ? 'Descanso largo' : 'Descanso') : 'Enfoque'}</h2>
-      <div className="timer">{formatTime(secondsLeft)}</div>
-   
-      <div className="buttons" style={{display:'flex', gap:10, justifyContent:'center'}}>
-        <button onClick={handlePauseToggle} style={{padding:'8px 18px', borderRadius:6, border:'none', background:'#a05a2c', color:'#fff', fontWeight:500}}>
-          {isRunning ? 'Pausar' : 'Iniciar'}
-        </button>
-        <button onClick={reset} style={{padding:'8px 18px', borderRadius:6, border:'none', background:'#eee', color:'#a05a2c', fontWeight:500}}>Reiniciar</button>
-        <button onClick={skipCycle} style={{padding:'8px 18px', borderRadius:6, border:'none', background:'#f7b267', color:'#fff', fontWeight:500}}>Adelantar</button>
-      </div>
-      {/* Nuevo: contador de ciclos de pomodoro completados (work+break) */}
-      <div style={{marginTop: 10, color: '#a05a2c', fontWeight: 500, fontSize: 15}}>
-        Ciclos pomodoro completados: {pomodoroCycles}
-      </div>
-      {/* Nuevo: contador de breaks largos */}
+
+      {/* Circular Progress Bar */}
+        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: 40, marginBottom: 20}}>
+          <div style={{position: 'relative', width: 220, height: 220, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <svg width={220} height={220} style={{position: 'absolute', top: 0, left: 0}}>
+          <circle
+            cx={110}
+            cy={110}
+            r={100}
+            stroke="#eee"
+            strokeWidth={14}
+            fill="none"
+          />
+          <circle
+            cx={110}
+            cy={110}
+            r={100}
+            stroke={isBreak ? (isLongBreak ? '#f7b267' : '#4ecdc4') : '#a05a2c'}
+            strokeWidth={14}
+            fill="none"
+            strokeDasharray={2 * Math.PI * 100}
+            strokeDashoffset={
+              // Antihorario, inicia arriba, aumenta de 0 a 2PI*R
+              2 * Math.PI * 100 * (1 + (duration - secondsLeft) / duration)
+            }
+            strokeLinecap="round"
+            style={{
+              transition: 'stroke-dashoffset 0.5s linear',
+              transform: 'rotate(-90deg)',
+              transformOrigin: '50% 50%',
+            }}
+          />
+            </svg>
+            <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: 220,
+          height: 220,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          pointerEvents: 'none'
+            }}>
+          <h2 style={{ margin: 0, marginBottom: 0, fontSize: 23, color: isBreak ? (isLongBreak ? '#f7b267' : '#4ecdc4') : '#a05a2c'}}>
+            {isBreak ? (isLongBreak ? 'Descanso largo' : 'Descanso') : 'Enfoque'}
+          </h2>
+          <div className="timer" style={{fontSize: 48, fontWeight: 700, color: '#222'}}>{formatTime(secondsLeft)}</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="buttons" style={{display:'flex', gap:0, justifyContent:'center'}}>
+          <button onClick={handlePauseToggle} style={{padding:'8px 18px', borderRadius:6, border:'none', background:'#a05a2c', color:'#fff', fontWeight:500}}>
+            {isRunning ? 'Pausar' : 'Iniciar'}
+          </button>
+          <button onClick={reset} style={{padding:'8px 18px', borderRadius:6, border:'none', background:'#eee', color:'#a05a2c', fontWeight:500}}>Reiniciar</button>
+          <button onClick={skipCycle} style={{padding:'8px 18px', borderRadius:6, border:'none', background:'#f7b267', color:'#fff', fontWeight:500}}>Adelantar</button>
+        </div>
+        <div style={{marginTop: 10, color: '#a05a2c', fontWeight: 500, fontSize: 15}}>
+          Ciclos pomodoro completados: {pomodoroCycles}
+        </div>
+        {/* Nuevo: contador de breaks largos */}
       <div style={{marginTop: 2, color: '#a05a2c', fontWeight: 500, fontSize: 15}}>
         Breaks largos completados: {Math.floor(totalLongBreaks)}
       </div>
