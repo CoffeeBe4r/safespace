@@ -304,7 +304,7 @@ export default function Pomodoro() {
             }
             strokeLinecap="round"
             style={{
-              transition: 'stroke-dashoffset 0.5s linear',
+              transition: 'stroke-dashoffset 1s linear',
               transform: 'rotate(-90deg)',
               transformOrigin: '50% 50%',
             }}
@@ -312,18 +312,27 @@ export default function Pomodoro() {
             </svg>
             <div style={{
           position: 'absolute',
-          top: 0,
+          top: 45,
           left: 0,
           width: 220,
-          height: 220,
+          height: 150,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          pointerEvents: 'none'
+          pointerEvents: 'none',
             }}>
-          <h2 style={{ margin: 0, marginBottom: 0, fontSize: 23, color: isBreak ? (isLongBreak ? '#f7b267' : '#4ecdc4') : '#a05a2c'}}>
-            {isBreak ? (isLongBreak ? 'Descanso largo' : 'Descanso') : 'Enfoque'}
+          <h2 style={{marginTop: 1, margin: -30, fontSize: 23, color: isBreak ? (isLongBreak ? '#f7b267' : '#4ecdc4') : '#a05a2c',  display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {isBreak && isLongBreak ? (
+              <>
+                <span>Descanso</span>
+                <span>largo</span>
+              </>
+            ) : isBreak ? (
+              'Descanso'
+            ) : (
+              'Enfoque'
+            )}
           </h2>
           <div className="timer" style={{fontSize: 48, fontWeight: 700, color: '#222'}}>{formatTime(secondsLeft)}</div>
             </div>
