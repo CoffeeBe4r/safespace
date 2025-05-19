@@ -34,15 +34,18 @@
 
 .buttons {
   margin-top: 1rem;
+  margin: 1rem;
+  font-size: 1.08em;
+  font-weight: 500;
+  border-radius: 14px;
+  gap: 0.5rem;
+  display: flex;
+  min-width: 10px;
 }
 
 button {
   /* ...hereda estilos globales... */
-  margin: 0.5rem;
-  font-size: 1.08em;
-  font-weight: 500;
-  border-radius: 14px;
-  min-width: 110px;
+min-width: 30px;
 }
 
 button:active {
