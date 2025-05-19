@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './Pomodoro.css';
+import ModalConfig from '../ModalConfig/ModalConfig';
 
 export default function Pomodoro() {
   const defaultConfig = {
@@ -16,9 +17,8 @@ export default function Pomodoro() {
       if (saved && typeof saved.WORK_TIME === 'number') {   
         return saved;
       }
-    } catch (e) { /* ignorar error */ }
-    console.error()
-   return defaultConfig;
+    } catch (e) { console.error(e); }
+    return defaultConfig;
   };
 
   const [config, setConfig] = useState(getInitialConfig());
@@ -37,7 +37,7 @@ export default function Pomodoro() {
       if (saved && typeof saved.pausedSecondsLeft === 'number') {
         return saved;
       }
-    } catch {}
+    } catch (e) { console.error(e); }
     return {
       isBreak: false,
       isRunning: false,
@@ -213,7 +213,7 @@ export default function Pomodoro() {
 
   // Modal de configuración
   const [tempConfig, setTempConfig] = useState(config);
-  useEffect(() => { setTempConfig(config); }, [showConfigModal]);
+  useEffect(() => { setTempConfig(config); }, [showConfigModal, config]);
 
   const handleConfigChange = (e) => {
     const { name, value } = e.target;
@@ -269,105 +269,14 @@ export default function Pomodoro() {
         ⚙️
       </button>
       {/* Modal de configuración */}
-      {showConfigModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          background: 'rgba(0,0,0,0.35)',
-          zIndex: 100,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-          onClick={() => setShowConfigModal(false)}
-        >
-          <div
-            style={{
-              background: '#fff',
-              padding: 32,
-              borderRadius: 16,
-              minWidth: 320,
-              maxWidth: 360,
-              boxShadow: '0 8px 32px #0004',
-              position: 'relative',
-              animation: 'modalIn 0.2s',
-            }}
-            onClick={e => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setShowConfigModal(false)}
-              style={{
-                position: 'absolute',
-                top: 12,
-                right: 12,
-                background: 'none',
-                border: 'none',
-                fontSize: 22,
-                color: '#888',
-                cursor: 'pointer',
-              }}
-              aria-label="Cerrar"
-            >✕</button>
-            <h3 style={{marginTop: 0, marginBottom: 18, color: '#a05a2c'}}>Ajustes de Pomodoro</h3>
-            <div style={{marginBottom: 16}}>
-              <label style={{display:'block', marginBottom:6}}>Duración Pomodoro (min):
-                <input
-                  type="number"
-                  min={1}
-                  name="WORK_TIME"
-                  value={Math.round(tempConfig.WORK_TIME/60)}
-                  onChange={e => handleConfigChange({
-                    target: { name: 'WORK_TIME', value: Math.max(1, e.target.value) * 60 }
-                  })}
-                  style={{marginLeft: 8, width: 60, padding:4, borderRadius:6, border:'1px solid #ccc'}}
-                />
-              </label>
-              <label style={{display:'block', marginBottom:6}}>Duración Break (min):
-                <input
-                  type="number"
-                  min={1}
-                  name="BREAK_TIME"
-                  value={Math.round(tempConfig.BREAK_TIME/60)}
-                  onChange={e => handleConfigChange({
-                    target: { name: 'BREAK_TIME', value: Math.max(1, e.target.value) * 60 }
-                  })}
-                  style={{marginLeft: 8, width: 60, padding:4, borderRadius:6, border:'1px solid #ccc'}}
-                />
-              </label>
-              <label style={{display:'block', marginBottom:6}}>Duración Descanso Largo (min):
-                <input
-                  type="number"
-                  min={1}
-                  name="LONG_BREAK_TIME"
-                  value={Math.round(tempConfig.LONG_BREAK_TIME/60)}
-                  onChange={e => handleConfigChange({
-                    target: { name: 'LONG_BREAK_TIME', value: Math.max(1, e.target.value) * 60 }
-                  })}
-                  style={{marginLeft: 8, width: 60, padding:4, borderRadius:6, border:'1px solid #ccc'}}
-                />
-              </label>
-              <label style={{display:'block', marginBottom:6}}>Pomodoros antes de descanso largo:
-                <input
-                  type="number"
-                  min={1}
-                  name="POMODOROS_BEFORE_LONG_BREAK"
-                  value={tempConfig.POMODOROS_BEFORE_LONG_BREAK}
-                  onChange={handleConfigChange}
-                  style={{marginLeft: 8, width: 60, padding:4, borderRadius:6, border:'1px solid #ccc'}}
-                />
-              </label>
-            </div>
-            <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 18}}>
-              <button onClick={handleConfigReset} style={{background:'#eee', border:'none', borderRadius:6, padding:'6px 14px', color:'#a05a2c'}}>Restablecer</button>
-              <button onClick={() => setShowConfigModal(false)} style={{background:'#eee', border:'none', borderRadius:6, padding:'6px 14px'}}>Cancelar</button>
-              <button onClick={handleConfigSave} style={{background:'#a05a2c', color:'#fff', border:'none', borderRadius:6, padding:'6px 18px'}}>Guardar</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ModalConfig
+        showConfigModal={showConfigModal}
+        tempConfig={tempConfig}
+        handleConfigChange={handleConfigChange}
+        handleConfigSave={handleConfigSave}
+        handleConfigReset={handleConfigReset}
+        onClose={() => setShowConfigModal(false)}
+      />
 
       {/* Circular Progress Bar */}
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: 40, marginBottom: 20}}>
@@ -421,7 +330,7 @@ export default function Pomodoro() {
           </div>
         </div>
 
-        <div className="buttons" style={{display:'flex', gap:0, justifyContent:'center'}}>
+        <div className="buttons" style={{display:'flex', gap:10, justifyContent:'center'}}>
           <button onClick={handlePauseToggle} style={{padding:'8px 18px', borderRadius:6, border:'none', background:'#a05a2c', color:'#fff', fontWeight:500}}>
             {isRunning ? 'Pausar' : 'Iniciar'}
           </button>
