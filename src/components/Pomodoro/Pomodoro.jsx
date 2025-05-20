@@ -8,6 +8,7 @@ export default function Pomodoro() {
     BREAK_TIME: 5 * 60,
     LONG_BREAK_TIME: 15 * 60,
     POMODOROS_BEFORE_LONG_BREAK: 4,
+    autoStart: false, // New autoStart property
   };
 
   // Configuración editable
@@ -111,6 +112,20 @@ export default function Pomodoro() {
     localStorage.setItem('pomodoro-config-v1', JSON.stringify(config));
   }, [config]);
 
+  // Modificar el useEffect para actualizar el título solo cuando el temporizador esté activo
+  useEffect(() => {
+    if (isRunning) {
+      const title = isBreak
+        ? isLongBreak
+          ? 'Descanso largo'
+          : 'Descanso'
+        : 'Enfoque';
+      document.title = title;
+    } else {
+      document.title = 'Pomodoro'; // Título por defecto cuando no está activo
+    }
+  }, [isRunning, isBreak, isLongBreak]);
+
   // Lógica para finalizar sesión y cambiar de modo
   const handleSessionEnd = () => {
     if (!isBreak) {
@@ -127,8 +142,8 @@ export default function Pomodoro() {
         setDuration(BREAK_TIME);
         setPausedSecondsLeft(BREAK_TIME);
       }
-      setIsRunning(false);
-      setStartTimestamp(null);
+      setIsRunning(config.autoStart); // Auto-start break if enabled
+      setStartTimestamp(config.autoStart ? Date.now() : null);
     } else {
       // Termina descanso, pasa a pomodoro y suma ciclo
       const nextCycles = cyclesCompleted + 1;
@@ -136,8 +151,8 @@ export default function Pomodoro() {
       setIsLongBreak(false);
       setDuration(WORK_TIME);
       setPausedSecondsLeft(WORK_TIME);
-      setIsRunning(false);
-      setStartTimestamp(null);
+      setIsRunning(config.autoStart); // Auto-start pomodoro if enabled
+      setStartTimestamp(config.autoStart ? Date.now() : null);
       setCyclesCompleted(nextCycles);
       setPomodoroCycles((prev) => prev + 1); // Suma ciclo work+break
       if (isLongBreak) {
@@ -185,8 +200,8 @@ export default function Pomodoro() {
         setDuration(BREAK_TIME);
         setPausedSecondsLeft(BREAK_TIME);
       }
-      setIsRunning(false);
-      setStartTimestamp(null);
+      setIsRunning(config.autoStart); // Auto-start break if enabled
+      setStartTimestamp(config.autoStart ? Date.now() : null);
     } else {
       // De descanso a pomodoro y suma ciclo
       const nextCycles = cyclesCompleted + 1;
@@ -194,8 +209,8 @@ export default function Pomodoro() {
       setIsLongBreak(false);
       setDuration(WORK_TIME);
       setPausedSecondsLeft(WORK_TIME);
-      setIsRunning(false);
-      setStartTimestamp(null);
+      setIsRunning(config.autoStart); // Auto-start pomodoro if enabled
+      setStartTimestamp(config.autoStart ? Date.now() : null);
       setCyclesCompleted(nextCycles);
       setPomodoroCycles((prev) => prev + 1); // Suma ciclo work+break
       if (isLongBreak) {
@@ -219,7 +234,7 @@ export default function Pomodoro() {
     const { name, value } = e.target;
     setTempConfig((prev) => ({
       ...prev,
-      [name]: Number(value)
+      [name]: name === 'autoStart' ? e.target.checked : Number(value)
     }));
   };
 
@@ -231,8 +246,8 @@ export default function Pomodoro() {
     setPausedSecondsLeft(tempConfig.WORK_TIME);
     setIsBreak(false);
     setIsLongBreak(false);
-    setIsRunning(false);
-    setStartTimestamp(null);
+    setIsRunning(tempConfig.autoStart); // Auto-start if enabled
+    setStartTimestamp(tempConfig.autoStart ? Date.now() : null);
     setSecondsLeft(tempConfig.WORK_TIME);
     setPomodorosCompleted(0);
   };
@@ -344,7 +359,7 @@ export default function Pomodoro() {
             {isRunning ? 'Pausar' : 'Iniciar'}
           </button>
           <button onClick={reset} style={{padding:'8px 18px', borderRadius:6, border:'none', background:'#eee', color:'#a05a2c', fontWeight:500}}>Reiniciar</button>
-          <button onClick={skipCycle} style={{padding:'8px 18px', borderRadius:6, border:'none', background:'#f7b267', color:'#fff', fontWeight:500}}>Adelantar</button>
+          <button onClick={skipCycle} style={{padding:'8px 18px', borderRadius:6, border:'none', background:'#9b632b', color:'#fff', fontWeight:500}}>Adelantar</button>
         </div>
         <div style={{marginTop: 10, color: '#a05a2c', fontWeight: 500, fontSize: 15}}>
           Ciclos pomodoro completados: {pomodoroCycles}
