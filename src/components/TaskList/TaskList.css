@@ -47,6 +47,11 @@
 
 /* .task-input button styles are inherited from global styles */
 
+.task-input button.pressed {
+  transform: scale(0.95);
+  transition: transform 0.2s;
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -56,6 +61,7 @@ ul {
 li {
   display: flex;
   align-items: center;
+  justify-content: space-between; /* Ensure the button spans the entire area */
   padding: 0.55rem 0.5rem;
   border-bottom: 1px solid var(--main-border);
   cursor: pointer;
@@ -84,6 +90,7 @@ li span {
   font-size: 1.08em;
   padding-left: 0.2em;
   text-align: left;
+  display: block; /* Ensure the entire span is clickable */
 }
 
 li:hover {
@@ -110,6 +117,7 @@ li button {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0; /* Prevent the button from shrinking */
 }
 
 li button:hover {
