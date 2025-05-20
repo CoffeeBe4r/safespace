@@ -7,6 +7,7 @@ export default function TaskList() {
     return stored ? JSON.parse(stored) : [];
   });
   const [newTask, setNewTask] = useState('');
+  const [isButtonPressed, setIsButtonPressed] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -18,9 +19,18 @@ export default function TaskList() {
     setNewTask('');
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      setIsButtonPressed(true);
+      addTask();
+      setTimeout(() => setIsButtonPressed(false), 200); // Remove class after animation
+    }
+  };
+
   const toggleDone = (index) => {
     const updated = [...tasks];
     updated[index].done = !updated[index].done;
+    updated.sort((a, b) => a.done - b.done); // Move completed tasks to the end
     setTasks(updated);
   };
 
@@ -39,14 +49,27 @@ export default function TaskList() {
           placeholder="Nueva tarea..."
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
-        <button onClick={addTask}>Agregar</button>
+        <button 
+          onClick={addTask} 
+          className={isButtonPressed ? 'pressed' : ''}
+        >
+          Agregar
+        </button>
       </div>
       <ul>
         {tasks.map((task, i) => (
-          <li key={i} className={task.done ? 'done' : ''}>
-            <span onClick={() => toggleDone(i)}>{task.text}</span>
-            <button onClick={() => deleteTask(i)}>🗑️</button>
+          <li 
+            key={i} 
+            className={task.done ? 'done' : ''} 
+            onClick={() => toggleDone(i)}
+          >
+            <span>{task.text}</span>
+            <button onClick={(e) => {
+              e.stopPropagation(); // Prevent triggering toggleDone
+              deleteTask(i);
+            }}>🗑️</button>
           </li>
         ))}
       </ul>
