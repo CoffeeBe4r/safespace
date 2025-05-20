@@ -29,7 +29,7 @@
   font-variant-numeric: tabular-nums;
   font-weight: 700;
   background: none;
-  text-shadow: 0 2px 8px #fff6e9cc;
+  text-shadow: 0 2px 8px var(--main-muted);
 }
 
 .buttons {
@@ -45,7 +45,7 @@
 
 button {
   /* ...hereda estilos globales... */
-min-width: 30px;
+  min-width: 30px;
 }
 
 button:active {
