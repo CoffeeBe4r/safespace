@@ -12,7 +12,7 @@
 }
 
 .modal-content {
-  background: #fff;
+  background: var(--main-card);
   padding: 32px;
   border-radius: 16px;
   min-width: 320px;
@@ -32,27 +32,58 @@
   width: 20px;
   border: none;
   font-size: 15px;
-  color: #888;
+  color: var(--main-muted);
   cursor: pointer;
 }
 
 .modal-title {
   margin-top: 0;
   margin-bottom: 18px;
-  color: #a05a2c;
+  color: var(--main-primary);
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-body .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .modal-body label {
-  display: block;
-  margin-bottom: 6px;
+  flex: 1;
+  text-align: left;
+  margin-bottom: 0;
 }
 
 .modal-body input {
+  flex: 0;
+  text-align: right;
   margin-left: 8px;
   width: 60px;
   padding: 4px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--main-border);
+}
+
+/* Adjust toggle button alignment */
+.modal-body .toggle-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-body .toggle-container label {
+  flex: 1;
+  text-align: left;
+}
+
+.modal-body .toggle-container .toggle-button {
+  flex: 0;
 }
 
 .modal-footer {
@@ -72,7 +103,7 @@
   cursor: pointer;
 }
 .modal-footer button {
-  background: #e68a4c;
+  background: var(--main-accent);
   border: none;
   width: 6.5rem;
   
@@ -83,7 +114,7 @@
 }
 
 .modal-footer button:last-child {
-  background: #a05a2c;
+  background: var(--main-primary);
   color: #fff;
 
 }
@@ -144,4 +175,34 @@
   background: rgba(0, 0, 0, 0.35);
   width: 100%;
   height: 100%;
+}
+
+.toggle-button {
+  width: 40px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.toggle-button.active {
+  background: #a05a2c;
+}
+
+.toggle-circle {
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  position: absolute;
+  top: .5px;
+  left: 0px;
+  transition: left 0.3s ease;
+}
+
+.toggle-button.active .toggle-circle {
+  left: 20px;
 }
