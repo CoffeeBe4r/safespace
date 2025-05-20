@@ -27,8 +27,8 @@ export default function ModalConfig({
         >✕</button>
         <h3 className="modal-title">Ajustes de Pomodoro</h3>
         <div className="modal-body">
-          <label>
-            Duración Pomodoro (min):
+          <div className="row">
+            <label>Duración Pomodoro (min):</label>
             <input
               type="number"
               min={1}
@@ -43,9 +43,9 @@ export default function ModalConfig({
                 })
               }
             />
-          </label>
-          <label>
-            Duración Break (min):
+          </div>
+          <div className="row">
+            <label>Duración Break (min):</label>
             <input
               type="number"
               min={1}
@@ -60,9 +60,9 @@ export default function ModalConfig({
                 })
               }
             />
-          </label>
-          <label>
-            Duración Descanso Largo (min):
+          </div>
+          <div className="row">
+            <label>Duración Descanso Largo (min):</label>
             <input
               type="number"
               min={1}
@@ -77,9 +77,9 @@ export default function ModalConfig({
                 })
               }
             />
-          </label>
-          <label>
-            Pomodoros antes de descanso largo:
+          </div>
+          <div className="row">
+            <label>Pomodoros antes de descanso largo:</label>
             <input
               type="number"
               min={1}
@@ -87,7 +87,20 @@ export default function ModalConfig({
               value={tempConfig.POMODOROS_BEFORE_LONG_BREAK}
               onChange={handleConfigChange}
             />
-          </label>
+          </div>
+          <div className="toggle-container" style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+            <label style={{ marginRight: '12px', fontSize: '16px', color: '#555' }}>Auto-iniciar contadores:</label>
+            <button
+              className={`toggle-button ${tempConfig.autoStart ? 'active' : ''}`}
+              onClick={() =>
+                handleConfigChange({
+                  target: { name: 'autoStart', checked: !tempConfig.autoStart },
+                })
+              }
+            >
+              <div className="toggle-circle"></div>
+            </button>
+          </div>
         </div>
         <div className="modal-footer" style={{ display: 'flex', gap: '1px' }}>
           <button className="modal-button" onClick={handleConfigReset}>Restablecer</button>
